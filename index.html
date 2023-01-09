@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <style type="text/css">
+        h2{padding-top:1rem;}
+        input, textarea{margin: 0.3rem;}
+        input[type="text"]{display: block;padding: 1em; background: blue;color: white;border: none; border-radius: 4px;font-size: 2rem;}
+        textarea{display: block;}
+        .speakBut{padding: 0.5rem; margin: 0.1rem;background: blue; color: white; border: none; border-radius: 4px;display: inline-block; cursor: pointer;}
+    </style>
+</head>
+
+<body>
+<h2>텍스트 읽기</h2>
+<!-- 쉼표를 통해 문장을 끊어서 읽을 수 있습니다.(브라우저에 따라 다름) -->
+<pre id="text1">
+나는 배웠다,   
+다른 사람의 최대치에
+나 자신을 비교하기보다는,
+내 자신의 최대치에
+나를 비교해야 한다는 것을,
+
+나는 배웠다,
+그리고 또 나는 배웠다,
+인생은 무슨 사건이 일어났는가에
+달린 것이 아니라,
+일어난 사건에 어떻게
+대처하느냐에 달렸다는 것을,
+무엇이 아무리 얇게 베어난다 해도,
+거기에는 언제나 양면이 있다는 것을,
+
+그리고 또 나는 배웠다
+앞과 뒤를 계산하지 않고
+자신에게 정직한 사람이 결국은
+우리가 살아가는 데서 앞선다는 것을
+내가 알지도 보지도 못한 사람에 의하여
+내 인생의 진로가 변할 수도 있다는 것을
+
+그리고 정말 나는 배웠다
+타인의 마음을 상하게 하지 않는다는 것과
+나의 믿는 바를 위해
+내 입장을 분명히 밝힌다는 것
+그러나 이 두 가지 일을
+엄격하게 구분하는 것이
+얼마나 어려운지를 나는 배웠다
+</pre>
+<button id="text11">말하기</button>
+<button id="stt">그만</button>
+
+<h2>텍스트 필드 읽기</h2>
+<textarea id="msg">
+여기에 문장을 쓰면 읽는다.
+</textarea> <button id="action">읽기</button>
+
+<h2>말하기 버튼 만들기</h2>
+<input id="cbutton" type="text" placeholder="내가 자주 쓰는 말">
+    <script>
+text11.onclick = ()=>{
+    speak(text1.innerHTML, 10, 1)
+}
+
+action.onclick = ()=>{
+    speak(msg.value, 1, 1)
+}
+
+stt.onclick = ()=>{
+    window.speechSynthesis.cancel();
+    console.log("끝");
+    //speak("끝", 1, 1);
+}
+
+//말하기 함수(속도와 피치를 변수로 설정가능하나 브라우저에 따라 가능여부는 다릅니다)
+// ko-KR, ja-JP, en-US (언어설정)
+function speak(text, spd, pitch) {
+    window.speechSynthesis.cancel();
+
+    let speech = new SpeechSynthesisUtterance();
+    speech.rate = spd; //0.1~10
+    speech.pitch = pitch; // 0~2
+    speech.lang = "ko-KR";
+    speech.text = text;
+    
+    window.speechSynthesis.speak(speech);
+}
+
+window.onkeydown = (e)=> {
+    if(e.keyCode == 13){
+        let t = document.createElement("div");
+        t.className = "speakBut";
+        t.innerHTML = cbutton.value;
+        t.dataset.intext = cbutton.value;
+        console.log(t.dataset.intext);
+        t.onclick = (event)=> {
+            let s = event.target.dataset.intext;
+            speak(s,0.1,0.1);
+        }
+        cbutton.value = "";
+        document.body.appendChild(t);
+    }
+}
+
+    </script>
+</body>
+</html>
+    
+    
+    
+
+    
